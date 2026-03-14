@@ -1,0 +1,51 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mycloude-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: mycloude
+      MYSQL_USER: mycloude
+      MYSQL_PASSWORD: mycloude
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mycloude_mysql_data:/var/lib/mysql
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mycloude-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # Override DB settings for in-network MySQL container
+      MYSQL_HOST: mysql
+      MYSQL_USER: mycloude
+      MYSQL_PASSWORD: mycloude
+      MYSQL_DATABASE: mycloude
+      # Collect host metrics from mounted host filesystems
+      PROCFS_PATH: /host/proc
+      METRICS_ROOT_PATH: /host/rootfs
+      METRICS_COLLECTION_INTERVAL_SECONDS: 5
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/host/rootfs:ro
+      # Mount SSH directory for remote terminal key auth
+      - ${HOME}/.ssh:/home/root/.ssh:ro
+
+volumes:
+  mycloude_mysql_data:

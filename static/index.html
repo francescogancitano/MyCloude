@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyCloude - Remote Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@5.3.0/css/xterm.css" />
+</head>
+<body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-grid"></div>
+
+    <!-- Login Section -->
+    <div id="login-container">
+        <div class="login-box glass">
+            <p class="eyebrow">Secure Control Plane</p>
+            <h2>Welcome Back</h2>
+            <p class="login-subtitle">Authenticate to access metrics and terminal.</p>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Sign In</button>
+            </form>
+            <p id="login-error" class="error-message"></p>
+        </div>
+    </div>
+
+    <!-- Main Content Section (hidden by default) -->
+    <div id="main-container" class="hidden">
+        <header class="topbar glass">
+            <div class="brand">
+                <p class="eyebrow">MyCloude</p>
+                <h1>Remote Dashboard</h1>
+            </div>
+            <div class="topbar-actions">
+                <span id="connection-pill" class="pill offline">Offline</span>
+                <button id="ssh-connect-button" class="primary">Connect</button>
+                <button id="ssh-disconnect-button" class="ghost">Disconnect</button>
+                <button id="logout-button" class="danger">Logout</button>
+            </div>
+        </header>
+        <div class="container" id="main-layout-container">
+            <div class="panel glass" id="metrics-panel">
+                <div class="panel-header">
+                    <h2>System Pulse</h2>
+                    <span id="metrics-updated-at" class="muted">Waiting for data</span>
+                </div>
+
+                <div id="metrics-cards" class="metrics-cards">
+                    <article class="metric-card">
+                        <p>CPU Load</p>
+                        <strong id="metric-cpu">--</strong>
+                    </article>
+                    <article class="metric-card">
+                        <p>CPU Temp</p>
+                        <strong id="metric-temp">--</strong>
+                    </article>
+                    <article class="metric-card">
+                        <p>RAM Usage</p>
+                        <strong id="metric-ram">--</strong>
+                    </article>
+                    <article class="metric-card">
+                        <p>Disk Usage</p>
+                        <strong id="metric-disk">--</strong>
+                    </article>
+                    <article class="metric-card">
+                        <p>Net In</p>
+                        <strong id="metric-net-in">--</strong>
+                    </article>
+                    <article class="metric-card">
+                        <p>Net Out</p>
+                        <strong id="metric-net-out">--</strong>
+                    </article>
+                </div>
+
+                <div class="status-row">
+                    <span>Status</span>
+                    <span id="metric-status" class="status-badge">Unknown</span>
+                </div>
+            </div>
+            <div id="panel-resizer" aria-hidden="true"></div>
+
+            <div class="panel glass" id="terminal-panel" style="position: relative;">
+                <button id="sidebar-toggle-btn" class="sidebar-collapse-btn" title="Toggle Sidebar">&lt;</button>
+                <div class="panel-header">
+                    <h2>Remote Terminal</h2>
+                    <div class="terminal-header-actions">
+                        <button id="add-tab-button" class="ghost">+ Tab</button>
+                        <span class="muted">Live session</span>
+                    </div>
+                </div>
+                <div id="terminal-tabs" class="terminal-tabs"></div>
+                <div id="terminal-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/xterm@5.3.0/lib/xterm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@xterm/addon-fit@0.10.0/lib/addon-fit.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+</html>
