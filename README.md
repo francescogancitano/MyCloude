@@ -25,7 +25,7 @@ and to access to your pc/server from you local internet or via public internet
    git clone https://github.com/francescogancitano/MyCloude.git
    ```
 
-4) rename your ***.env.example** file to **.env**
+4) rename your **.env.example** file to **.env**
    ```bash
    mv .env.example .env
    ```
